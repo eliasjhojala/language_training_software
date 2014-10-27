@@ -59,7 +59,7 @@ void keyPressed() {
   enterPressed = keyCode == ENTER && keyCode == RETURN;
   if (!enterPressed) {
     if (keyCode == BACKSPACE) {
-      nowWriting = nowWriting.substring(0, nowWriting.length() - 1);
+      if (nowWriting.length() != 0) nowWriting = nowWriting.substring(0, nowWriting.length() - 1);
     } else {
       try {
         nowWriting = nowWriting + key;
