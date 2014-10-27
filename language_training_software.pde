@@ -15,8 +15,8 @@ String[] a = {"1",   "2",   "3"    };
 boolean allowAnswerAsQuestion = true;
 
 
-boolean asked = new boolean[q.length];
-boolean answRight = new boolean[q.length];
+boolean[] asked = new boolean[q.length];
+boolean[] answRight = new boolean[q.length];
 
 String nowWriting = "";
 boolean selected = false;
@@ -47,17 +47,24 @@ void draw() {
         noLoop();
         return;
       }
-    } else {
-      //A question is selected. Draw it, and check for completion
-      
     }
+  } else {
+    //A question is selected. Draw it, and check for completion
+    
   }
 }
 
-
+boolean enterPressed;
 void keyPressed() {
-  if (keyCode != ENTER && keyCode != RETURN) {
-    nowWriting = nowWriting & key;
+  enterPressed = keyCode == ENTER && keyCode == RETURN;
+  if (!enterPressed) {
+    if (keyCode == BACKSPACE) {
+      nowWriting = nowWriting.substring(0, nowWriting.length() - 1);
+    } else {
+      try {
+        nowWriting = nowWriting + key;
+      } catch(Exception ex) { return; }
+    }
   }
 }
 
@@ -76,12 +83,12 @@ void selectNewQuestion() {
 
 //Returns whether the quiz has ended
 boolean startNewRound() {
-  boolean quizOver;
+  boolean quizOver = false;
   //Check if the quiz should be over
   for (int i = 0; i < answRight.length; i++) {
     if (!answRight[i]) {
       quizOver = true;
-      asked = new int[q.length];
+      asked = new boolean[q.length];
       break;
     }
   }
