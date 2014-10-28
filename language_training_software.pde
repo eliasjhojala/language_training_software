@@ -16,6 +16,8 @@ boolean allowAnswerAsQuestion = true;
 //Display the right answer if the user answers wrong?
 boolean displayAnswerOnWrong = true;
 
+boolean caseSensitive = false;
+
 //
 
 
@@ -93,7 +95,9 @@ void draw() {
     if (enterPressed) {
       //Answer submitted
       enterPressed = false;
-      answRight[selection] = nowWriting.toLowerCase().equals(tempA.toLowerCase());
+      
+      if (caseSensitive) answRight[selection] = nowWriting.toLowerCase().equals(tempA.toLowerCase());
+                    else answRight[selection] = nowWriting.equals(tempA);
       
       wrongDisplay = answRight[selection];
       wrongDisplayStart = millis();
