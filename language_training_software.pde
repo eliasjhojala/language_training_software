@@ -122,9 +122,10 @@ void keyPressed() {
     if (keyCode == BACKSPACE) {
       if (nowWriting.length() != 0) nowWriting = nowWriting.substring(0, nowWriting.length() - 1);
     } else {
-      try {
-        nowWriting = nowWriting + key;
-      } catch(Exception ex) { return; }
+      if (keyCode != SHIFT)
+        try {
+          nowWriting = nowWriting + key;
+        } catch(Exception ex) { return; }
     }
   }
 }
