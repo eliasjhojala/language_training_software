@@ -5,7 +5,16 @@
 void setup() {
   size(500, 500);
   //Load the table of words
-  //--todo
+  Table tempTb = loadTable("list.csv", "header");
+  int rows = tempTb.getRowCount();
+  q = new String[rows];
+  a = new String[rows];
+  for (int i = 0; i < rows; i++) {
+    q[i] = tempTb.getString(i, "q");
+    a[i] = tempTb.getString(i, "a");
+  }
+  asked = new boolean[q.length];
+  answRight = new boolean[q.length];
 }
 //Q&A
 String[] q = {"One", "Two", "Three"};
