@@ -88,7 +88,8 @@ void draw() {
       }
     } else if(doDisplay) {
       fill(255, 0, 0);
-      text("Wrong! It was: " + rightAnswer, 20, 42);
+      if (displayAnswerOnWrong) text("Wrong! It was: " + rightAnswer, 20, 42);
+                           else text("Wrong!", 20, 42);
     }
       
     
