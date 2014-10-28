@@ -13,8 +13,11 @@ String[] a = {"1",   "2",   "3"    };
 
 //Whether to allow an answer to act as a question (and the question to act as the answer)
 boolean allowAnswerAsQuestion = true;
+//Display the right answer if the user answers wrong?
+boolean displayAnswerOnWrong = true;
 
-boolean displayAnswerOnWrong;
+//
+
 
 boolean[] asked = new boolean[q.length];
 boolean[] answRight = new boolean[q.length];
@@ -23,6 +26,13 @@ String nowWriting = "";
 boolean selected = false;
 int selection;
 boolean selectionIsInverse = false;
+boolean quizOver = false;
+
+int wrongDisplayStart;
+boolean wrongDisplay;
+String rightAnswer;
+
+
 void draw() {  
   if (!selected) {
     //There is no question being answered ---> select a new one.
@@ -42,10 +52,13 @@ void draw() {
       if (startNewRound()) {
         //all questions right, quiz over!
         //todo: end quiz
+        answRight = new boolean[q.length];
+        asked = new boolean[q.length];
         background(0);
         fill(255, 0, 0);
         textSize(30);
-        text("Quiz over!", 20, 50);
+        text("Quiz over! Press to restart. ", 20, 50);
+        quizOver = true;
         noLoop();
         
       }
@@ -64,14 +77,37 @@ void draw() {
     text(tempQ, 30, 250);
     text("A: " + nowWriting, 20, 480);
     line(40, 490, 480, 490);
+    boolean doDisplay = wrongDisplayStart + 2000 > millis();
+    if (wrongDisplay) {
+      //Last answer right
+      if (doDisplay) {
+        fill(0, 255, 0);
+        text("Right!", 20, 42);
+      }
+    } else if(doDisplay) {
+      fill(255, 0, 0);
+      text("Wrong! It was: " + rightAnswer, 20, 42);
+    }
+      
+    
     if (enterPressed) {
       //Answer submitted
       enterPressed = false;
       answRight[selection] = nowWriting.toLowerCase().equals(tempA.toLowerCase());
+      
+      wrongDisplay = answRight[selection];
+      wrongDisplayStart = millis();
+      rightAnswer = tempA;
+      
       selected = false;
       nowWriting = "";
     }
   }
+}
+
+
+void mousePressed() {
+  if (quizOver) {loop(); quizOver = false;}
 }
 
 boolean enterPressed;
