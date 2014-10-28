@@ -14,6 +14,7 @@ String[] a = {"1",   "2",   "3"    };
 //Whether to allow an answer to act as a question (and the question to act as the answer)
 boolean allowAnswerAsQuestion = true;
 
+boolean displayAnswerOnWrong;
 
 boolean[] asked = new boolean[q.length];
 boolean[] answRight = new boolean[q.length];
@@ -21,13 +22,14 @@ boolean[] answRight = new boolean[q.length];
 String nowWriting = "";
 boolean selected = false;
 int selection;
+boolean selectionIsInverse = false;
 void draw() {  
   if (!selected) {
     //There is no question being answered ---> select a new one.
     //Check if any unasked questions are left
     boolean questionsLeft = false;
     for (int i = 0; i < asked.length; i++) {
-      if (!asked[i]) {
+      if (!asked[i] && !answRight[i]) {
         questionsLeft = true;
         break;
       }
@@ -45,18 +47,36 @@ void draw() {
         textSize(30);
         text("Quiz over!", 20, 50);
         noLoop();
-        return;
+        
       }
     }
   } else {
     //A question is selected. Draw it, and check for completion
-    
+    String tempQ, tempA;
+    if (!selectionIsInverse) { tempQ = q[selection]; tempA = a[selection]; }
+                        else { tempA = q[selection]; tempQ = a[selection]; }
+    background(0);
+    fill(255);
+    stroke(255);
+    textSize(32);
+    text("Question: ", 20, 200);
+    textSize(22);
+    text(tempQ, 30, 250);
+    text("A: " + nowWriting, 20, 480);
+    line(40, 490, 480, 490);
+    if (enterPressed) {
+      //Answer submitted
+      enterPressed = false;
+      answRight[selection] = nowWriting.toLowerCase().equals(tempA.toLowerCase());
+      selected = false;
+      nowWriting = "";
+    }
   }
 }
 
 boolean enterPressed;
 void keyPressed() {
-  enterPressed = keyCode == ENTER && keyCode == RETURN;
+  if (!enterPressed) enterPressed = keyCode == ENTER || keyCode == RETURN;
   if (!enterPressed) {
     if (keyCode == BACKSPACE) {
       if (nowWriting.length() != 0) nowWriting = nowWriting.substring(0, nowWriting.length() - 1);
@@ -73,8 +93,9 @@ void selectNewQuestion() {
   selection = -1;
     while (selection == -1) {
       int index = constrain(round(random(-0.5, asked.length - 0.5)), 0, asked.length - 1);
-      if(!asked[index]) {
+      if(!asked[index] && !answRight[index]) {
         selection = index;
+        selectionIsInverse = round(random(0, 1)) == 1 && allowAnswerAsQuestion;
         break;
       }
     }
@@ -83,14 +104,14 @@ void selectNewQuestion() {
 
 //Returns whether the quiz has ended
 boolean startNewRound() {
-  boolean quizOver = false;
+  boolean temp = true;
   //Check if the quiz should be over
   for (int i = 0; i < answRight.length; i++) {
     if (!answRight[i]) {
-      quizOver = true;
+      temp = false;
       asked = new boolean[q.length];
       break;
     }
   }
-  return quizOver;
+  return temp;
 }
