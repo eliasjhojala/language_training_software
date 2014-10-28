@@ -97,7 +97,7 @@ void draw() {
       //Answer submitted
       enterPressed = false;
       
-      if (caseSensitive) answRight[selection] = nowWriting.toLowerCase().equals(tempA.toLowerCase());
+      if (!caseSensitive) answRight[selection] = nowWriting.toLowerCase().equals(tempA.toLowerCase());
                     else answRight[selection] = nowWriting.equals(tempA);
       
       wrongDisplay = answRight[selection];
