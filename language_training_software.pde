@@ -113,6 +113,8 @@ void draw() {
       wrongDisplayStart = millis();
       rightAnswer = tempA;
       
+      asked[selection] = true;
+      
       selected = false;
       nowWriting = "";
     }
