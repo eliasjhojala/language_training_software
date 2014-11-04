@@ -144,7 +144,7 @@ void selectNewQuestion() {
   selection = -1;
     while (selection == -1) {
       int index = constrain(round(random(-0.5, asked.length - 0.5)), 0, asked.length - 1);
-      if(!asked[index] && !answRight[index]) {
+      if(!asked[index] || !answRight[index]) {
         selection = index;
         selectionIsInverse = round(random(0, 1)) == 1 && allowAnswerAsQuestion;
         break;
